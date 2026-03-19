@@ -26,7 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Innkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -46,11 +46,11 @@ public class VillageLevel extends Level {
 		color1 = 0x48763c;
 		color2 = 0x59994a;
 
-		viewDistance = 12;
+		viewDistance = 36;
 	}
 
-	private static final int WIDTH  = 32;
-	private static final int HEIGHT = 32;
+	private static final int WIDTH  = 90;
+	private static final int HEIGHT = 48;
 
 	// ═══════════════════════════════════════════════════════════════
 	//  Layout matching the reference image:
@@ -71,8 +71,8 @@ public class VillageLevel extends Level {
 	// ═══════════════════════════════════════════════════════════════
 
 	// ── Pond (top-left) ───────────────────────────────────────────
-	private static final Rect pondOuter  = new Rect(2,  2,  12, 9);
-	private static final Rect pondWater  = new Rect(3,  3,  11, 8);
+	private static final Rect pondOuter  = new Rect(1,  1,  12, 9);
+	private static final Rect pondWater  = new Rect(1,  1,  12, 9);
 
 	// ── Kitchen / Tavern (top-right) ──────────────────────────────
 	private static final Rect kitchenBuilding = new Rect(19, 2,  28, 9);
@@ -80,7 +80,7 @@ public class VillageLevel extends Level {
 
 	// ── Blacksmith / Forge (middle-left) ──────────────────────────
 	private static final Rect forgeBuilding   = new Rect(2,  12, 10, 19);
-	private static final Point forgeDoor      = new Point(10, 15); // right wall, faces center
+	private static final Point forgeDoor      = new Point(9, 15); // right wall, faces center
 
 	// ── Well + central square ─────────────────────────────────────
 	private static final Rect centralSquare   = new Rect(12, 11, 20, 19);
@@ -97,13 +97,12 @@ public class VillageLevel extends Level {
 	// ── Dungeon entrance (inside/near armory area) ────────────────
 	private static final int DUNGEON_ENTRANCE_POS = 23 + 28 * WIDTH;
 
-	// ── Wandmaker position (inside kitchen) ───────────────────────
-	private static final Point wandmakerPos   = new Point(23, 5);
+	// ── Innkeeper position (inside kitchen) ───────────────────────
+	private static final Point innkeeperPos   = new Point(23, 5);
 
 	// ── Torch / lamp positions ────────────────────────────────────
 	private static final Point[] torchPositions = new Point[]{
 			// Pond corners
-			new Point(2,  2),  new Point(11, 2),
 			// Kitchen
 			new Point(19, 2),  new Point(27, 2),
 			// Forge
@@ -174,9 +173,9 @@ public class VillageLevel extends Level {
 		Painter.fill( this, 0, 0, WIDTH, HEIGHT, Terrain.HIGH_GRASS );
 
 		// Border walls (dense tree line at edges)
-		Painter.fill( this, 0, 0, WIDTH, 1, Terrain.WALL );
-		Painter.fill( this, 0, HEIGHT - 1, WIDTH, 1, Terrain.WALL );
-		Painter.fill( this, 0, 0, 1, HEIGHT, Terrain.WALL );
+		Painter.fill( this, 0, 0, WIDTH, 1, Terrain.CHASM ); // top
+		Painter.fill( this, 0, HEIGHT - 1, WIDTH, 1, Terrain.CHASM ); // bottom
+		Painter.fill( this, 0, 0, 1, HEIGHT, Terrain.CHASM );
 		Painter.fill( this, WIDTH - 1, 0, 1, HEIGHT, Terrain.WALL );
 
 		// ── 2. Pond (top-left) ───────────────────────────────────
@@ -184,10 +183,8 @@ public class VillageLevel extends Level {
 		Painter.fill( this, pondOuter, Terrain.EMPTY );
 		Painter.fill( this, pondWater, Terrain.WATER );
 		// Scatter a few grass tiles along the pond edge for a natural look
-		Painter.set( this, 3,  3, Terrain.GRASS );
-		Painter.set( this, 10, 3, Terrain.GRASS );
-		Painter.set( this, 3,  7, Terrain.GRASS );
-		Painter.set( this, 10, 7, Terrain.GRASS );
+
+		// Painter.set( this, 10, 7, Terrain.GRASS );
 
 		// ── 3. Kitchen / Tavern (top-right) ──────────────────────
 		buildBuilding( kitchenBuilding );
@@ -335,9 +332,9 @@ public class VillageLevel extends Level {
 
 	@Override
 	protected void createMobs() {
-		Wandmaker wandmaker = new Wandmaker();
-		wandmaker.pos = pointToCell( wandmakerPos );
-		mobs.add( wandmaker );
+		Innkeeper innkeeper = new Innkeeper();
+		innkeeper.pos = pointToCell( innkeeperPos );
+		mobs.add( innkeeper );
 	}
 
 	@Override
